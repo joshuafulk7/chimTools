@@ -1,1 +1,245 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN">
 
+<html>
+<head>
+<title>Outside Mount Calculator</title>
+<style type="text/css">
+<!--
+table, th, td, caption, div {
+border:0px solid black;
+}
+table {
+float:left;
+}
+caption {
+font-size:20px;
+padding-top:5px;
+padding-bottom:10px;
+}
+th {
+font-size:18px;
+}
+div {
+float:left;
+height:90%
+}
+.dbg {
+width: 15px;
+color: red;
+}
+.numInput {
+
+}
+
+
+
+.head1 {
+font-size: 24px;
+border-bottom: 1px solid black;
+border-top: 1px solid black;
+}
+.res1 {
+font-size: 23px;
+font-weight: normal;
+}
+.tdul {
+text-decoration: underline;
+}
+.spacer {
+height:12px;
+}
+
+-->
+</style>
+<script language="JavaScript" type="text/javascript">
+<!--
+var OOS = true;
+var hasLid = true;
+var stdSkirt = false;
+
+function calculateOM() {
+
+var deh = 0.0;
+if(document.getElementById('de0').checked){deh = 0.5}
+if(document.getElementById('de1').checked){deh = 1.0}
+if(document.getElementById('de2').checked){deh = 1.5}
+if(document.getElementById('de3').checked){deh = 0.0}
+
+if(document.getElementById('isToFin').checked){var fit = 0.0}else{var fit = 0.25};
+
+var horizontalSkirt = parseFloat(document.getElementById('horSkirt').value);
+var verticalSkirt = parseFloat(document.getElementById('vertSkirt').value);
+
+var screenHeight = parseFloat(document.getElementById('scrHeight').value)+0.0;
+var legHeight = screenHeight+0.125;
+
+var baseY = horizontalSkirt+verticalSkirt+deh;
+var base1 = fit+parseFloat(document.getElementById('side1').value);
+var base2 = fit+2.0+parseFloat(document.getElementById('side2').value);
+var base3 = fit+parseFloat(document.getElementById('side3').value);
+var base4 = fit+2.0+parseFloat(document.getElementById('side4').value);
+
+var bot1 = base1-2.0*horizontalSkirt-0.5;
+var bot2 = base2-2.0*horizontalSkirt-2.5;
+var bot3 = base3-2.0*horizontalSkirt-0.5;
+var bot4 = base4-2.0*horizontalSkirt-2.5;
+
+var top1 = bot1+0.5;
+var top2 = bot2+0.5;
+var top3 = bot3+0.5;
+var top4 = bot4+0.5;
+
+var lidOverHang = parseFloat(document.getElementById('lidOH').value)
+var lidx = 0.0;
+var lidy = 0.0;
+if(top1>top3){lidx = 2.0+top1+2.0*lidOverHang}else{lidx = 2.0+top3+2.0*lidOverHang}
+if(top2>top4){lidy = 2.0+top2+2.0*lidOverHang}else{lidy = 2.0+top4+2.0*lidOverHang}
+
+var outputText = "";
+
+if(checkInputs()){
+if(document.getElementById('isOOS').checked){
+outputText="<table style='font-size: 28px'><th colspan='2' class='head1'>Base</th><tr><td>1 & 3: </td><td><b>"+baseY+"&quot; x "+base1+"&quot;" + 
+"</b></td></tr><tr><td>2 & 4: </td><td><b>"+baseY+"&quot; x "+base2+"&quot;</b></td></tr><th colspan='2' class='head1'>Btm Frame & Screen<br>" +
+"<span class='res1'><b>"+screenHeight+"&quot;</b> Screen Height</span></th><tr><td>1 & 3: </td><td><b>2&quot; x "+bot1+"&quot;</b></td></tr><tr><td>2 & 4: </td>" + 
+"<td><b>2&quot; x "+bot2+"&quot;</b></td></tr><th colspan='2' class='head1'>Top Frame</th><tr><td>1 & 3: </td><td><b>2&quot; x "+top1+"&quot;</b></td>" + 
+"</tr><tr><td>2 & 4: </td><td><b>2&quot; x "+top2+"&quot;</b></td></tr><tr><td class='spacer'></td></tr><tr><td class='tdul'>Legs:</td><td>" + 
+"<b>4.5&quot; x "+legHeight+"&quot;</b></td></tr><tr><td class='spacer'></td></tr>";
+}else{
+outputText="<table style='font-size: 28px'><th colspan='2' class='head1'>Base</th><tr><td>1: </td><td><b>"+baseY+"&quot; x "+base1+"&quot;</b></td>" + 
+"</tr><tr><td>2: </td><td><b>"+baseY+"&quot; x "+base2+"&quot;</b></td></tr><tr><td>3: </td><td><b>"+baseY+"&quot; x "+base3+"&quot;</b></td>" + 
+"</tr><tr><td>4: </td><td><b>"+baseY+"&quot; x "+base4+"&quot;</b></td></tr><th colspan='2' class='head1'>Btm Frame & Screen<br>" + 
+"<span class='res1'><b>"+screenHeight+"&quot;</b> Screen Height</span></th><tr><td>1: </td><td><b>2&quot; x "+bot1+"&quot;</b></td>" + 
+"</tr><tr><td>2: </td><td><b>2&quot; x "+bot2+"&quot;</b></td></tr><tr><td>3: </td><td><b>2&quot; x "+bot3+"&quot;</b></td></tr><tr>" + 
+"<td>4: </td><td><b>2&quot; x "+bot4+"&quot;</b></td></tr><th colspan='2' class='head1'>Top Frame</th><tr>" + 
+"<td>1: </td><td><b>2&quot; x "+top1+"&quot;</b></td></tr><tr><td>2: </td><td><b>2&quot; x "+top2+"&quot;</b></td></tr><tr>" + 
+"<td>3: </td><td><b>2&quot; x "+top3+"&quot;</b></td></tr><tr><td>4: </td><td><b>2&quot; x "+top4+"&quot;</b></td></tr>" + 
+"<tr><td class='spacer'></td></tr><tr><td class='tdul'>Legs:</td><td><b>4.5&quot; x "+legHeight+"&quot;</b></td></tr><tr><td class='spacer'></td></tr>"
+}
+if(hasLid){
+outputText=outputText+"<tr><td class='tdul'>Lid:</td><td><b>"+lidx+"&quot; x "+lidy+"&quot;</b></td></tr>";
+}
+outputText=outputText+"</table>";
+}else{
+outputText="<p style='color:red'>Missing or invalid input.</p>";
+}
+document.getElementById('results').innerHTML=outputText;
+}
+
+function checkValue(inputValue){
+var newVal = inputValue.replace('.','')
+var isNumber = !/\D/.test(newVal);
+if (inputValue!=''){
+return isNumber;
+}else{
+return false;
+}
+}
+
+function checkInputs() {
+
+var debug0 = checkValue(document.getElementById('side1').value)
+var debug1 = checkValue(document.getElementById('side2').value)
+var debug2 = checkValue(document.getElementById('side3').value)
+var debug3 = checkValue(document.getElementById('side4').value)
+var debug4 = checkValue(document.getElementById('scrHeight').value)
+var debug5 = checkValue(document.getElementById('vertSkirt').value)
+var debug6 = checkValue(document.getElementById('horSkirt').value)
+var debug7 = checkValue(document.getElementById('lidOH').value)
+
+if(!hasLid){debug7 = true}
+
+if(document.getElementById('de0').checked||document.getElementById('de1').checked||document.getElementById('de2').checked||document.getElementById('de3').checked){
+var radioDbg = true;
+}else{
+var radioDbg = false;
+}
+
+if(!debug0){document.getElementById('dbg0').innerHTML="X";}else{document.getElementById('dbg0').innerHTML="";}
+if(!debug1){document.getElementById('dbg1').innerHTML="X";}else{document.getElementById('dbg1').innerHTML="";}
+if(!debug2){document.getElementById('dbg2').innerHTML="X";}else{document.getElementById('dbg2').innerHTML="";}
+if(!debug3){document.getElementById('dbg3').innerHTML="X";}else{document.getElementById('dbg3').innerHTML="";}
+if(!debug4){document.getElementById('dbg4').innerHTML="X";}else{document.getElementById('dbg4').innerHTML="";}
+if(!debug5){document.getElementById('dbg5').innerHTML="X";}else{document.getElementById('dbg5').innerHTML="";}
+if(!debug6){document.getElementById('dbg6').innerHTML="X";}else{document.getElementById('dbg6').innerHTML="";}
+if(!radioDbg){document.getElementById('dbgradio').innerHTML="X";}else{document.getElementById('dbgradio').innerHTML="";}
+if(!debug7){document.getElementById('dbg7').innerHTML="X";}else{document.getElementById('dbg7').innerHTML="";}
+
+if(debug0&&debug1&&debug2&&debug3&&debug4&&debug5&&debug6&&debug7&&radioDbg){return true}else{return false}
+}
+
+function disableLid() {
+hasLid = !hasLid;
+document.getElementById('lidOH').disabled = !hasLid;
+document.getElementById('lidOH').value = '';
+}
+
+function changeOOS() {
+		OOS = !OOS;
+    document.getElementById('side3').disabled = !OOS;
+		document.getElementById('side4').disabled = !OOS;
+		if(OOS){
+    document.getElementById('side3').value = '';
+		document.getElementById('side4').value = '';
+		}else{
+    document.getElementById('side3').value = document.getElementById('side1').value;
+		document.getElementById('side4').value = document.getElementById('side2').value;
+		}
+};
+
+function syncValues(elemID1,elemID2){
+if(!OOS){
+    document.getElementById(elemID2).value = document.getElementById(elemID1).value;
+}
+}
+
+function changeStdSkirt() {
+		stdSkirt = !stdSkirt;
+    document.getElementById('vertSkirt').disabled = stdSkirt;
+		document.getElementById('horSkirt').disabled = stdSkirt;
+		if(stdSkirt){
+    document.getElementById('vertSkirt').value = '3';
+		document.getElementById('horSkirt').value = '2';
+		}else{
+    document.getElementById('vertSkirt').value = '';
+		document.getElementById('horSkirt').value = '';
+		}
+};
+//-->
+</script>
+
+
+</head>
+<body>
+<table>
+<caption>Outside Mount Calculator</caption>
+<th colspan="3">Overall Dimensions</th>
+<tr><td>Build to finish:</td><td><input type="checkbox" id="isToFin" /></td><td></td></tr>
+<tr><td>Side 1:</td><td><input type="text" id="side1" onchange="syncValues('side1','side3')" class ="numInput"/></td><td id="dbg0" class="dbg"></td></tr>
+<tr><td>Side 2:</td><td><input type="text" id="side2" onchange="syncValues('side2','side4')" class ="numInput"/></td><td id="dbg1" class="dbg"></td></tr>
+<tr><td>Same as 1 & 2:</td><td><input type="checkbox" id="isOOS" onclick="changeOOS()"/></td><td></td></tr>
+<tr><td>Side 3:</td><td><input type="text" id="side3" class ="numInput" /></td><td id="dbg2" class="dbg"></td></tr>
+<tr><td>Side 4:</td><td><input type="text" id="side4" class ="numInput" /></td><td id="dbg3" class="dbg"></td></tr>
+
+<tr><td>Screen height:</td><td><input type="text" id="scrHeight" class ="numInput" /></td><td id="dbg4" class="dbg"></td></tr>
+
+<th colspan="3">Skirt</th>
+<tr><td>Standard:</td><td><input type="checkbox" id="isStdSkirt" onclick="changeStdSkirt()"/></td><td></td></tr>
+<tr><td>Vertical:</td><td><input type="text" id="vertSkirt" class ="numInput" /></td><td id="dbg5" class="dbg"></td></tr>
+<tr><td>Horizontal:</td><td><input type="text" id="horSkirt" class ="numInput" /></td><td id="dbg6" class="dbg"></td></tr>
+
+<th colspan="3">Drip Edge</th>
+<tr><td>Standard/Hemmed:</td><td><input type="radio" name="drip" id="de0" /></td><td id="dbgradio" class="dbg"></td></tr>
+<tr><td>&frac12; Inch 45&#0176;:</td><td><input type="radio" name="drip" id="de1" /></td><td></td></tr>
+<tr><td>1 Inch 45&#0176;:</td><td><input type="radio" name="drip" id="de2" /></td><td></td></tr>
+<tr><td>None:</td><td><input type="radio" name="drip" id="de3" /></td><td></td></tr>
+
+<th colspan="3">Flat Lid</th>
+<tr><td>Overhang:</td><td><input type="text" id="lidOH" class ="numInput" /></td><td id="dbg7" class="dbg"></td></tr>
+<tr><td>No flat lid:</td><td><input type="checkbox" id="noLid" onclick="disableLid()"/></td><td></td></tr>
+
+<th colspan="2"><button type="button" onclick="calculateOM()">Calculate</button>&nbsp;<button type="button" onclick="location.reload()">Clear</button>&nbsp;<button onclick='window.print()'>Print</button></th>
+</table>
+<div id="results"></div>
+</body>
+</html>
